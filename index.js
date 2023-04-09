@@ -9,7 +9,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.get("/signalemiter", (req, res) => {
+app.get("/getsignals", (req, res) => {
     let instrument = [];
     instrument.push(btc);
     // instrument.push(eth);
