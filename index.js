@@ -18,13 +18,25 @@ app.get("/getsignals", (req, res) => {
 });
 
 
-let BTC_FLAGS = ['X', 'X', 'X', 'X', 'X'];
+app.get("/getSpecialSignal", (req, res) => {
+    let instrument = [];
+    instrument.push(specialBtc);
+    res.send(instrument);
+});
+
+
+
+let BTC_FLAGS = ['long', 'short', 'short', 'short', 'short'];
 let ETH_FLAGS = ['X', 'X', 'X', 'X', 'X'];
 let LTC_FLAGS = ['X', 'X', 'X', 'X', 'X'];
 let btc = { symbol: "BTCUSDT", positionAmt: 0, leverageAmt: 1, flags: BTC_FLAGS };
 let eth = { symbol: "ETHUSDT", positionAmt: 0, leverageAmt: 1, flags: ETH_FLAGS };
 let ltc = { symbol: "LTCUSDT", positionAmt: 0, leverageAmt: 1, flags: LTC_FLAGS };
 
+
+
+
+let specialBtc = { symbol: "BTCUSDT", positionAmt: 0, leverageAmt: 1, flags: 'x' };
 
 app.post("/recivesignal", (req, res) => {
     const data = req.body;
@@ -47,6 +59,17 @@ app.post("/recivesignal", (req, res) => {
     res.sendStatus(200);
 });
 
+app.post("/specialsignal", (req, res) => {
+    const data = req.body;
+    if (data.symbol == "BTCUSDT") {
+        specialBtc.positionAmt = data.positionAmt;
+        specialBtc.leverageAmt = data.leverageAmt;
+        specialBtc.flags = data.side;
+    }
+    res.sendStatus(200);
+});
+
+
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
 });
@@ -61,15 +84,3 @@ process.on('TypeError', function (err) {
     console.log(err);
 });
 
-
-
-
-
-
-
-// {"symbol": "ETHUSDT",
-//   "side": "long",
-//   "positionAmt": 10,
-//   "leverageAmt": 10,
-//   "flag":1
-// }
